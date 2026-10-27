@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: 246 248 251;
+    --surface: 255 255 255;
+    --subtle: 241 245 249;
+    --border: 226 232 240;
+    --fg: 15 23 42;
+    --muted: 100 116 139;
+    --primary: 29 78 216;
+    --primary-fg: 255 255 255;
+    --primary-soft: 219 234 254;
+    --success: 21 128 61;
+    --success-soft: 220 252 231;
+    --warning: 180 83 9;
+    --warning-soft: 254 243 199;
+    --danger: 185 28 28;
+    --danger-soft: 254 226 226;
+    color-scheme: light;
+  }
+
+  .dark {
+    --bg: 3 7 18;
+    --surface: 15 23 42;
+    --subtle: 30 41 59;
+    --border: 51 65 85;
+    --fg: 241 245 249;
+    --muted: 148 163 184;
+    --primary: 96 165 250;
+    --primary-fg: 3 7 18;
+    --primary-soft: 30 58 138;
+    --success: 74 222 128;
+    --success-soft: 20 83 45;
+    --warning: 251 191 36;
+    --warning-soft: 120 53 15;
+    --danger: 248 113 113;
+    --danger-soft: 127 29 29;
+    color-scheme: dark;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-bg text-fg antialiased;
+    font-feature-settings: "cv11", "ss01";
+  }
+
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-bg;
+  }
+}
+
+@layer utilities {
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  .safe-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

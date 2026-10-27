@@ -1,3 +1,5 @@
+import secrets
+
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.db.models import Q
 from django.utils import timezone
@@ -177,6 +179,22 @@ class AdminUserActionView(APIView):
             user.save(update_fields=["is_active"])
 
         return Response(AdminUserSerializer(user).data)
+
+
+class AdminResetPasswordView(APIView):
+    """No email server is assumed, so the admin hands the user a temporary password."""
+
+    permission_classes = [IsAdmin]
+
+    def post(self, request, pk):
+        user = generics.get_object_or_404(User, pk=pk)
+        if user.pk == request.user.pk:
+            raise ValidationError({"detail": "Change your own password from your profile."})
+        temporary = "-".join(secrets.token_hex(2) for _ in range(3)) + "Pb"
+        user.set_password(temporary)
+        user.save(update_fields=["password"])
+        # Their existing sessions are invalid now, since the password hash changed.
+        return Response({"temporary_password": temporary})
 
 
 class AdminStatsView(APIView):

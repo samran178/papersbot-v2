@@ -101,3 +101,12 @@ def test_admin_endpoints_are_admin_only(api, teacher, student):
 def test_admin_user_filters(api, admin_user, pending_teacher, student):
     data = api(admin_user).get("/api/admin/users?role=teacher&approval_status=pending").json()
     assert [u["username"] for u in data["results"]] == ["pending_teacher"]
+
+
+def test_admin_resets_password(api, admin_user, student):
+    response = api(admin_user).post(f"/api/admin/users/{student.id}/reset-password")
+    assert response.status_code == 200
+    temporary = response.json()["temporary_password"]
+    student.refresh_from_db()
+    assert student.check_password(temporary) and not student.check_password(PASSWORD)
+    assert api(student).post(f"/api/admin/users/{admin_user.id}/reset-password").status_code == 403

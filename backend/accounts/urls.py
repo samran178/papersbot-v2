@@ -13,6 +13,7 @@ auth_urlpatterns = [
 
 admin_urlpatterns = [
     path("users", views.AdminUserListView.as_view()),
+    path("users/<int:pk>/reset-password", views.AdminResetPasswordView.as_view()),
     path("users/<int:pk>/<str:action>", views.AdminUserActionView.as_view()),
     path("stats", views.AdminStatsView.as_view()),
 ]
